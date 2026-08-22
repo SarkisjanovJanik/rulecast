@@ -1,0 +1,10 @@
+.git
+.github
+.idea
+.vscode
+*.md
+coverage.out
+*.test
+*.prof
+/out
+/rulecast

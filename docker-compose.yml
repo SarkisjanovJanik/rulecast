@@ -1,0 +1,44 @@
+name: rulecast
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: rulecast-postgres
+    environment:
+      POSTGRES_DB: rulecast
+      POSTGRES_USER: rulecast
+      POSTGRES_PASSWORD: rulecast
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U rulecast -d rulecast" ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  app:
+    build: .
+    container_name: rulecast-app
+    environment:
+      RULECAST_ADDR: ":8090"
+      RULECAST_ENVIRONMENT: production
+      RULECAST_DATABASE_URL: postgres://rulecast:rulecast@postgres:5432/rulecast?sslmode=disable
+      RULECAST_SDK_KEY: sdk-local-key
+      RULECAST_ADMIN_KEY: admin-local-key
+      RULECAST_LOG_LEVEL: info
+    ports:
+      - "8090:8090"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "/rulecast", "-healthcheck" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+
+volumes:
+  postgres-data:

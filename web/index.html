@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>rulecast</title>
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+<div class="root">
+
+  <header class="topbar">
+    <div>
+      <h1>rulecast</h1>
+      <p class="subtitle" id="status">connecting…</p>
+    </div>
+    <div class="topbar-actions">
+      <input id="admin-key" class="input" type="password" placeholder="admin key" autocomplete="off">
+      <input id="sdk-key" class="input" type="password" placeholder="sdk key" autocomplete="off">
+      <button id="reload" class="button" type="button">Reload</button>
+    </div>
+  </header>
+
+  <div class="layout">
+
+    <aside class="panel">
+      <h2>Flags</h2>
+      <ul id="flag-list" class="flag-list"></ul>
+
+      <h2>Versions</h2>
+      <ul id="version-list" class="version-list"></ul>
+    </aside>
+
+    <main class="panel">
+      <div id="empty" class="empty">Select a flag to edit its rules.</div>
+
+      <section id="editor" hidden>
+        <div class="editor-head">
+          <div>
+            <h2 id="flag-key"></h2>
+            <p class="subtitle" id="flag-description"></p>
+          </div>
+          <label class="toggle">
+            <input id="flag-enabled" type="checkbox">
+            <span>Enabled</span>
+          </label>
+        </div>
+
+        <h3>Variations</h3>
+        <table class="table" id="variations"></table>
+
+        <h3>Rules</h3>
+        <p class="subtitle">
+          Evaluated top to bottom; the first match wins. Rules are checked against the attribute
+          schema as you type.
+        </p>
+        <div id="rules"></div>
+        <button id="add-rule" class="button button-ghost" type="button">Add rule</button>
+
+        <div class="publish">
+          <input id="comment" class="input input-wide" type="text" placeholder="what changed?">
+          <button id="publish" class="button button-primary" type="button">Publish new version</button>
+        </div>
+        <div id="publish-result" class="notice" hidden></div>
+      </section>
+    </main>
+
+    <aside class="panel">
+      <h2>Try it</h2>
+      <p class="subtitle">
+        Only the attributes object goes here — the flag is the one selected on the left. Attributes
+        outside the schema are ignored, and the answer says which.
+      </p>
+      <textarea id="attributes" class="code" rows="12"></textarea>
+      <button id="evaluate" class="button" type="button">Evaluate</button>
+      <pre id="evaluation" class="result"></pre>
+
+      <h2>Schema</h2>
+      <ul id="schema" class="schema-list"></ul>
+    </aside>
+
+  </div>
+</div>
+<script src="app.js" type="module"></script>
+</body>
+</html>

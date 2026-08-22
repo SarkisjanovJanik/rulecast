@@ -1,0 +1,13 @@
+/rulecast
+/out/
+coverage.out
+*.test
+*.prof
+
+.idea/
+.vscode/
+.claude/
+.DS_Store
+
+# Fuzz corpora grow without bound; the seeds live in the test file.
+/internal/*/testdata/fuzz/
