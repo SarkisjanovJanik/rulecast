@@ -50,6 +50,7 @@ func withRecovery(logger *slog.Logger) middleware {
 				if recovered == nil {
 					return
 				}
+				//nolint:errorlint // Preserve net/http's exact ErrAbortHandler sentinel comparison.
 				if recovered == http.ErrAbortHandler {
 					panic(recovered)
 				}

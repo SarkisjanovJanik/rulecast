@@ -126,7 +126,9 @@ func evaluate(
 		stats.failures.Add(1)
 		return
 	}
-	defer response.Body.Close()
+	defer func() {
+		_ = response.Body.Close()
+	}()
 
 	if response.StatusCode != http.StatusOK {
 		stats.failures.Add(1)

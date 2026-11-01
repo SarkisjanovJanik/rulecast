@@ -28,6 +28,13 @@ linters:
         linters:
           - errcheck
 
+      # h.do close response bodies through t.Cleanup.
+      - path: internal/api/api_test\.go
+        text: 'response body must be closed'
+        source: 'h\.do\('
+        linters:
+          - bodyclose
+
 formatters:
   enable:
     - gofmt

@@ -1,6 +1,7 @@
 package expr
 
 import (
+	"errors"
 	"strings"
 	"testing"
 )
@@ -129,8 +130,8 @@ func TestErrorPointsAtTheOffendingColumn(t *testing.T) {
 		t.Fatal("expected an error")
 	}
 
-	parseError, ok := err.(*Error)
-	if !ok {
+	var parseError *Error
+	if !errors.As(err, &parseError) {
 		t.Fatalf("expected *Error, got %T", err)
 	}
 

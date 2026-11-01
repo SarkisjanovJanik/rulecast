@@ -213,7 +213,9 @@ func probe() error {
 	if err != nil {
 		return fmt.Errorf("probe %s: %w", url, err)
 	}
-	defer response.Body.Close()
+	defer func() {
+		_ = response.Body.Close()
+	}()
 
 	if response.StatusCode != http.StatusOK {
 		return fmt.Errorf("probe %s: status %d", url, response.StatusCode)

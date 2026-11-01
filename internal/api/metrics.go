@@ -50,36 +50,80 @@ func (m *Metrics) StreamOpened() { m.streamClients.Add(1) }
 func (m *Metrics) StreamClosed() { m.streamClients.Add(-1) }
 
 func (m *Metrics) WriteTo(w io.Writer, version int64, flags int) {
-	fmt.Fprint(w, "# HELP rulecast_evaluations_total Flag evaluations served.\n")
-	fmt.Fprint(w, "# TYPE rulecast_evaluations_total counter\n")
-	fmt.Fprintf(w, "rulecast_evaluations_total %d\n", m.evaluations.Load())
-
-	fmt.Fprint(w, "# HELP rulecast_evaluations_by_reason_total Evaluations by outcome.\n")
-	fmt.Fprint(w, "# TYPE rulecast_evaluations_by_reason_total counter\n")
-	for i, reason := range trackedReasons {
-		fmt.Fprintf(w, "rulecast_evaluations_by_reason_total{reason=%q} %d\n",
-			string(reason), m.byReason[i].Load())
+	if _, err := fmt.Fprint(w, "# HELP rulecast_evaluations_total Flag evaluations served.\n"); err != nil {
+		return
+	}
+	if _, err := fmt.Fprint(w, "# TYPE rulecast_evaluations_total counter\n"); err != nil {
+		return
+	}
+	if _, err := fmt.Fprintf(w, "rulecast_evaluations_total %d\n", m.evaluations.Load()); err != nil {
+		return
 	}
 
-	fmt.Fprint(w, "# HELP rulecast_publishes_total Ruleset versions published.\n")
-	fmt.Fprint(w, "# TYPE rulecast_publishes_total counter\n")
-	fmt.Fprintf(w, "rulecast_publishes_total %d\n", m.publishes.Load())
+	if _, err := fmt.Fprint(w, "# HELP rulecast_evaluations_by_reason_total Evaluations by outcome.\n"); err != nil {
+		return
+	}
+	if _, err := fmt.Fprint(w, "# TYPE rulecast_evaluations_by_reason_total counter\n"); err != nil {
+		return
+	}
+	for i, reason := range trackedReasons {
+		if _, err := fmt.Fprintf(w,
+			"rulecast_evaluations_by_reason_total{reason=%q} %d\n",
+			string(reason), m.byReason[i].Load(),
+		); err != nil {
+			return
+		}
+	}
 
-	fmt.Fprint(w, "# HELP rulecast_stream_clients Connected SSE clients.\n")
-	fmt.Fprint(w, "# TYPE rulecast_stream_clients gauge\n")
-	fmt.Fprintf(w, "rulecast_stream_clients %d\n", m.streamClients.Load())
+	if _, err := fmt.Fprint(w, "# HELP rulecast_publishes_total Ruleset versions published.\n"); err != nil {
+		return
+	}
+	if _, err := fmt.Fprint(w, "# TYPE rulecast_publishes_total counter\n"); err != nil {
+		return
+	}
+	if _, err := fmt.Fprintf(w, "rulecast_publishes_total %d\n", m.publishes.Load()); err != nil {
+		return
+	}
 
-	fmt.Fprint(w, "# HELP rulecast_active_version Version currently served.\n")
-	fmt.Fprint(w, "# TYPE rulecast_active_version gauge\n")
-	fmt.Fprintf(w, "rulecast_active_version %d\n", version)
+	if _, err := fmt.Fprint(w, "# HELP rulecast_stream_clients Connected SSE clients.\n"); err != nil {
+		return
+	}
+	if _, err := fmt.Fprint(w, "# TYPE rulecast_stream_clients gauge\n"); err != nil {
+		return
+	}
+	if _, err := fmt.Fprintf(w, "rulecast_stream_clients %d\n", m.streamClients.Load()); err != nil {
+		return
+	}
 
-	fmt.Fprint(w, "# HELP rulecast_active_flags Flags in the active version.\n")
-	fmt.Fprint(w, "# TYPE rulecast_active_flags gauge\n")
-	fmt.Fprintf(w, "rulecast_active_flags %d\n", flags)
+	if _, err := fmt.Fprint(w, "# HELP rulecast_active_version Version currently served.\n"); err != nil {
+		return
+	}
+	if _, err := fmt.Fprint(w, "# TYPE rulecast_active_version gauge\n"); err != nil {
+		return
+	}
+	if _, err := fmt.Fprintf(w, "rulecast_active_version %d\n", version); err != nil {
+		return
+	}
+
+	if _, err := fmt.Fprint(w, "# HELP rulecast_active_flags Flags in the active version.\n"); err != nil {
+		return
+	}
+	if _, err := fmt.Fprint(w, "# TYPE rulecast_active_flags gauge\n"); err != nil {
+		return
+	}
+	if _, err := fmt.Fprintf(w, "rulecast_active_flags %d\n", flags); err != nil {
+		return
+	}
 
 	if m.ExposuresDropped != nil {
-		fmt.Fprint(w, "# HELP rulecast_exposures_dropped_total Exposures dropped under backpressure.\n")
-		fmt.Fprint(w, "# TYPE rulecast_exposures_dropped_total counter\n")
-		fmt.Fprintf(w, "rulecast_exposures_dropped_total %d\n", m.ExposuresDropped())
+		if _, err := fmt.Fprint(w, "# HELP rulecast_exposures_dropped_total Exposures dropped under backpressure.\n"); err != nil {
+			return
+		}
+		if _, err := fmt.Fprint(w, "# TYPE rulecast_exposures_dropped_total counter\n"); err != nil {
+			return
+		}
+		if _, err := fmt.Fprintf(w, "rulecast_exposures_dropped_total %d\n", m.ExposuresDropped()); err != nil {
+			return
+		}
 	}
 }
